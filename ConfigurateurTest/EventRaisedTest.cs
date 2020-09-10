@@ -12,7 +12,6 @@ namespace ConfigurateurTest
         {
             Configuration config = new Configuration(new List<IEvent>());
 
-            var modeleId = new ModeleId("CONFIG01");
             var modelSelectionneEvent = new ModeleSelectionneEvent()
             {
                 Options = new Options[]
@@ -26,7 +25,7 @@ namespace ConfigurateurTest
             };
             var optionSelectionneeEvent = new OptionSelectionneeEvent(new OptionId("A"));
 
-            List<IEvent> eventRaised = config.SelectionneModele(modeleId);
+            List<IEvent> eventRaised = config.SelectionneModele();
 
             eventRaised.ShouldNotBeNull();
             eventRaised.Count.ShouldBe(2);

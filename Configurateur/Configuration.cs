@@ -15,17 +15,19 @@ namespace Configurateur
             }
         }
 
-        public List<IEvent> SelectionneModele(ModeleId modeleId)
+        public List<IEvent> SelectionneModele()
         {
             var modeleSelectionneEvent = new ModeleSelectionneEvent()
             {
                 Options = new Options[]
                 {
-                    new Options(){IsSelectionnee = true,
-                    OptionId = new OptionId("A")},
+                    new Options(){
+                        IsSelectionnee = true,
+                        OptionId = new OptionId("A")},
 
-                    new Options(){IsSelectionnee = false,
-                    OptionId = new OptionId("B")},
+                    new Options(){
+                        IsSelectionnee = false,
+                        OptionId = new OptionId("B")},
                 }
             };
 
