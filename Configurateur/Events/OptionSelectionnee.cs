@@ -1,10 +1,10 @@
 ﻿namespace Configurateur
 {
-    public struct OptionSelectionneeEvent : IEvent
+    public struct OptionSelectionnee : IEvent
     {
         public OptionId OptionSelectionneeId { get; }
 
-        public OptionSelectionneeEvent(OptionId optionId)
+        public OptionSelectionnee(OptionId optionId)
         {
             OptionSelectionneeId = optionId;
         }

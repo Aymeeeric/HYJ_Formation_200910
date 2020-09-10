@@ -2,7 +2,7 @@
 
 namespace Configurateur
 {
-    public struct ModeleSelectionneEvent : IEvent
+    public struct ModeleSelectionne : IEvent
     {
         public Options[] Options { get; set; }
 
@@ -13,7 +13,12 @@ namespace Configurateur
 
         public override bool Equals(object obj)
         {
-            return this.Options.Length == ((ModeleSelectionneEvent)obj).Options.Length;
+            return this.Options.Length == ((ModeleSelectionne)obj).Options.Length;
+        }
+
+        public override int GetHashCode()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Configurateur
 
         public List<IEvent> SelectionneModele()
         {
-            var modeleSelectionneEvent = new ModeleSelectionneEvent()
+            var modeleSelectionneEvent = new ModeleSelectionne()
             {
                 Options = new Options[]
                 {
@@ -31,7 +31,7 @@ namespace Configurateur
                 }
             };
 
-            var optionSelectionneeEvent = new OptionSelectionneeEvent(new OptionId("A"));
+            var optionSelectionneeEvent = new OptionSelectionnee(new OptionId("A"));
             return new List<IEvent>() { modeleSelectionneEvent, optionSelectionneeEvent };
         }
 
@@ -40,7 +40,7 @@ namespace Configurateur
             if (_projection.OptionSelectionneeIds.Any(opt => opt.Equals(optionId)))
                 return new List<IEvent>();
             else
-                return new List<IEvent>() { new OptionSelectionneeEvent(optionId) };
+                return new List<IEvent>() { new OptionSelectionnee(optionId) };
         }
 
         private class DecisionProjection
@@ -49,21 +49,13 @@ namespace Configurateur
 
             public void Apply(IEvent @event)
             {
-                if (@event is ModeleSelectionneEvent modEvt)
-                    PlayModeleSelectionneEvent(modEvt);
 
-                if (@event is OptionSelectionneeEvent optEvt)
+                if (@event is OptionSelectionnee optEvt)
                     PlayOptionSelectionneeEvent(optEvt);
             }
 
-            private void PlayModeleSelectionneEvent(ModeleSelectionneEvent @event)
-            {
-                OptionSelectionneeIds = @event.Options
-                    .Where(opt => opt.IsSelectionnee == true)
-                    .Select(opt => opt.OptionId).ToList();
-            }
 
-            private void PlayOptionSelectionneeEvent(OptionSelectionneeEvent @event)
+            private void PlayOptionSelectionneeEvent(OptionSelectionnee @event)
             {
                 if (OptionSelectionneeIds != null &&
                     OptionSelectionneeIds.Any(id => id.Equals(@event)))

@@ -12,7 +12,7 @@ namespace ConfigurateurTest
         {
             Configuration config = new Configuration(new List<IEvent>());
 
-            var modelSelectionneEvent = new ModeleSelectionneEvent()
+            var modelSelectionneEvent = new ModeleSelectionne()
             {
                 Options = new Options[]
                 {
@@ -23,7 +23,7 @@ namespace ConfigurateurTest
                     OptionId = new OptionId("B")},
                 }
             };
-            var optionSelectionneeEvent = new OptionSelectionneeEvent(new OptionId("A"));
+            var optionSelectionneeEvent = new OptionSelectionnee(new OptionId("A"));
 
             List<IEvent> eventRaised = config.SelectionneModele();
 
@@ -31,11 +31,11 @@ namespace ConfigurateurTest
             eventRaised.Count.ShouldBe(2);
 
             eventRaised[0]
-                .ShouldBeOfType<ModeleSelectionneEvent>()
+                .ShouldBeOfType<ModeleSelectionne>()
                 .ShouldBe(modelSelectionneEvent);
 
             eventRaised[1]
-                .ShouldBeOfType<OptionSelectionneeEvent>()
+                .ShouldBeOfType<OptionSelectionnee>()
                 .ShouldBe(optionSelectionneeEvent);
         }
 
@@ -44,7 +44,7 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("B");
 
-            var modelSelectionneEvent = new ModeleSelectionneEvent()
+            var modelSelectionneEvent = new ModeleSelectionne()
             {
                 Options = new Options[]
                 {
@@ -55,7 +55,7 @@ namespace ConfigurateurTest
                     OptionId = new OptionId("B")},
                 }
             };
-            var optionSelectionneeEvent = new OptionSelectionneeEvent(optionId);
+            var optionSelectionneeEvent = new OptionSelectionnee(optionId);
 
             var history = new List<IEvent>() { modelSelectionneEvent };
             Configuration config = new Configuration(history);
@@ -66,7 +66,7 @@ namespace ConfigurateurTest
             eventRaised.Count.ShouldBe(1);
 
             eventRaised[0]
-                .ShouldBeOfType<OptionSelectionneeEvent>()
+                .ShouldBeOfType<OptionSelectionnee>()
                 .ShouldBe(optionSelectionneeEvent);
         }
 
@@ -75,7 +75,7 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionneEvent()
+            var modelSelectionneEvent = new ModeleSelectionne()
             {
                 Options = new Options[]
                 {
@@ -86,7 +86,7 @@ namespace ConfigurateurTest
                     OptionId = new OptionId("B")},
                 }
             };
-            var optionSelectionneeEvent = new OptionSelectionneeEvent(optionId);
+            var optionSelectionneeEvent = new OptionSelectionnee(optionId);
 
             var history = new List<IEvent>() { modelSelectionneEvent, optionSelectionneeEvent };
             Configuration config = new Configuration(history);
