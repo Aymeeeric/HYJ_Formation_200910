@@ -5,56 +5,70 @@ namespace Configurateur
 {
     public class Configuration
     {
-        public List<IEvent> Events { get; }
+        private readonly DecisionProjection _projection = new DecisionProjection();
 
-        public static Configuration ConfigurationInitialize(List<IEvent> events)
+        public Configuration(List<IEvent> history)
         {
-            return new Configuration(events);
+            foreach (var @event in history)
+            {
+                _projection.Apply(@event);
+            }
         }
-
-        private Configuration(List<IEvent> events)
-        {
-            Events = events;
-        }
-
-        public ModeleId ModdelSelectionneId { get; set; }
 
         public List<IEvent> SelectionneModele(ModeleId modeleId)
         {
-            var events = new List<IEvent>();
-            var modeleSelectionneEvent = new ModeleSelectionneEvent();
-            modeleSelectionneEvent.Options = new Options[]
+            var modeleSelectionneEvent = new ModeleSelectionneEvent()
             {
-                new Options(){IsSelectionnee =true,
-                OptionId = new OptionId("A")},
+                Options = new Options[]
+                {
+                    new Options(){IsSelectionnee = true,
+                    OptionId = new OptionId("A")},
 
-                new Options(){IsSelectionnee =false,
-                OptionId = new OptionId("B")},
+                    new Options(){IsSelectionnee = false,
+                    OptionId = new OptionId("B")},
+                }
             };
 
             var optionSelectionneeEvent = new OptionSelectionneeEvent(new OptionId("A"));
-
-            events.Add(modeleSelectionneEvent);
-            events.Add(optionSelectionneeEvent);
-
-            return events;
+            return new List<IEvent>() { modeleSelectionneEvent, optionSelectionneeEvent };
         }
 
         public List<IEvent> SelectionneOption(OptionId optionId)
         {
-            var events = new List<IEvent>();
+            if (_projection.OptionSelectionneeIds.Any(opt => opt.Equals(optionId)))
+                return new List<IEvent>();
+            else
+                return new List<IEvent>() { new OptionSelectionneeEvent(optionId) };
+        }
 
-            var optSelectEvents = Events
-                .Where(ev => ev.GetType().IsAssignableFrom(typeof(OptionSelectionneeEvent)))
-                .Cast<OptionSelectionneeEvent>();
+        private class DecisionProjection
+        {
+            public List<OptionId> OptionSelectionneeIds { get; private set; } = new List<OptionId>();
 
-            if (!optSelectEvents.Any(ev => ev.OptionSelectionneeId.Equals(optionId)))
+            public void Apply(IEvent @event)
             {
-                var optionSelectionneeEvent = new OptionSelectionneeEvent(optionId);
-                events.Add(optionSelectionneeEvent);
+                if (@event is ModeleSelectionneEvent modEvt)
+                    PlayModeleSelectionneEvent(modEvt);
+
+                if (@event is OptionSelectionneeEvent optEvt)
+                    PlayOptionSelectionneeEvent(optEvt);
             }
 
-            return events;
+            private void PlayModeleSelectionneEvent(ModeleSelectionneEvent @event)
+            {
+                OptionSelectionneeIds = @event.Options
+                    .Where(opt => opt.IsSelectionnee == true)
+                    .Select(opt => opt.OptionId).ToList();
+            }
+
+            private void PlayOptionSelectionneeEvent(OptionSelectionneeEvent @event)
+            {
+                if (OptionSelectionneeIds != null &&
+                    OptionSelectionneeIds.Any(id => id.Equals(@event)))
+                    return;
+
+                OptionSelectionneeIds.Add(@event.OptionSelectionneeId);
+            }
         }
     }
 }
