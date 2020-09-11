@@ -252,12 +252,12 @@ namespace ConfigurateurTest
         {
             var eventStore = new EventStore();
             var projection = new ConfigEnAttenteProjection();
-            var service = new PubSubService(eventStore, new List<IProjection> { projection });
+            var pubSubService = new PubSubService(eventStore, new List<IProjection> { projection });
 
             var aggregate = new Configuration(new List<IEvent>());
             var events = aggregate.SelectionneModele();
 
-            service.Handle(events.Select(
+            pubSubService.Handle(events.Select(
                 evt=>(IEventWrapper) new ConfigurationEventWrapper()
                     {
                         ConfigurationId = new ConfigurationId("CONFIGA"),
@@ -278,31 +278,18 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Display_Updated_Projections_When_Send_Command_Via_Services()
         {
-            var configService = new ConfigurationService(new ConfigurationId("ID1"));
-            configService.SelectionneModele();
+            var eventStore = new EventStore();
+            var projection = new ConfigEnAttenteProjection();
+            var pubSubService = new PubSubService(eventStore, new List<IProjection> { projection });
 
-            //var eventStore = new EventStore();
-            //var projection = new ConfigEnAttenteProjection();
-            //var service = new PubSubService(eventStore, new List<IProjection> { projection });
+            var configService = new ConfigurationService(eventStore,pubSubService);
+            configService.SelectionneModele(new ConfigurationId("MODELE1"));
 
-            //var aggregate = new Configuration(new List<IEvent>());
-            //var events = aggregate.SelectionneModele();
+            eventStore.Events.ShouldNotBeEmpty();
+            eventStore.Events.Count.ShouldBe(2);
 
-            //service.Handle(events.Select(
-            //        evt => (IEventWrapper)new ConfigurationEventWrapper()
-            //        {
-            //            ConfigurationId = new ConfigurationId("CONFIGA"),
-            //            Event = evt
-            //        }
-            //    )
-            //    .ToList()
-            //);
-
-            //eventStore.Events.ShouldNotBeEmpty();
-            //eventStore.Events.Count.ShouldBe(2);
-
-            //projection.Configs.ShouldNotBeEmpty();
-            //projection.Configs.Count.ShouldBe(1);
+            projection.Configs.ShouldNotBeEmpty();
+            projection.Configs.Count.ShouldBe(1);
         }
     }
 }

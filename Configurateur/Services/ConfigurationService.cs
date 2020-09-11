@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Configurateur.Services
@@ -15,9 +16,27 @@ namespace Configurateur.Services
             _pubSubService = pubSubService;
         }
 
-        public void SelectionneModele()
+        public void SelectionneModele(ConfigurationId configId)
         {
-            throw new NotImplementedException();
+            var history = _eventStore.GetAllEventsForId(configId.Id);
+            var configAggregate = new Configuration(history);
+
+            var events = configAggregate.SelectionneModele();
+
+            if (events.Any())
+            {
+                _pubSubService.Handle(events.Select(
+                        evt => (IEventWrapper)new ConfigurationEventWrapper()
+                        {
+                            ConfigurationId = configId,
+                            Event = evt
+                        }
+                    )
+                    .ToList()
+                );
+            }
+
         }
+
     }
 }
