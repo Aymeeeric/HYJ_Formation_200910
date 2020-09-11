@@ -4,7 +4,14 @@ namespace Configurateur
 {
     public struct ModeleSelectionne : IEvent
     {
+        public ModeleSelectionne(ModeleId modeleId)
+        {
+            ModeleId = modeleId;
+            Options = null;
+        }
+
         public Options[] Options { get; set; }
+        public ModeleId ModeleId { get; set; }
 
         public override string ToString()
         {

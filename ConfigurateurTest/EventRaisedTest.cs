@@ -12,7 +12,7 @@ namespace ConfigurateurTest
         {
             Configuration config = new Configuration(new List<IEvent>());
 
-            var modelSelectionneEvent = new ModeleSelectionne()
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
             {
                 Options = new Options[]
                 {
@@ -44,7 +44,7 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("B");
 
-            var modelSelectionneEvent = new ModeleSelectionne()
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
             {
                 Options = new Options[]
                 {
@@ -75,7 +75,7 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionne()
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
             {
                 Options = new Options[]
                 {
@@ -101,7 +101,7 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionne()
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
             {
                 Options = new Options[]
                 {
@@ -134,7 +134,7 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionne()
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
             {
                 Options = new Options[]
                 {
@@ -153,6 +153,13 @@ namespace ConfigurateurTest
             List<IEvent> eventRaised = config.DeselectionneOption(new OptionId("B"));
 
             eventRaised.ShouldBeEmpty();
+        }
+
+
+        [Fact]
+        public void Should_Show_All_OnGoing_Config()
+        {
+         
         }
     }
 }
