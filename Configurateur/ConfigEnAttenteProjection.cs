@@ -1,5 +1,4 @@
-﻿using Configurateur.Domain.PublishedEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Configurateur
 {

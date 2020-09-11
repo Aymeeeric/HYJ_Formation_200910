@@ -159,7 +159,29 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Show_All_OnGoing_Config()
         {
-         
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            {
+                Options = new Options[]
+                {
+                    new Options(){IsSelectionnee = true,
+                        OptionId = new OptionId("A")},
+
+                    new Options(){IsSelectionnee = false,
+                        OptionId = new OptionId("B")},
+                }
+            };
+
+            var wrapper = new ConfigurationEventWrapper()
+            {
+                ConfigurationId = new ConfigurationId("CONFIGA"),
+                Event = modelSelectionneEvent
+            };
+
+            ConfigEnAttenteProjection projection = new ConfigEnAttenteProjection();
+            projection.Apply(wrapper);
+
+            projection.Configs.ShouldNotBeEmpty();
+            projection.Configs.Count.ShouldBe(1);
         }
     }
 }
