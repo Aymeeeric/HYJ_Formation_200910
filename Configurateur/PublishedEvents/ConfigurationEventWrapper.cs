@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace Configurateur
+﻿namespace Configurateur
 {
     public struct ConfigurationEventWrapper : IEventWrapper
     {

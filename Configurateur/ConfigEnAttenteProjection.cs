@@ -2,7 +2,7 @@
 
 namespace Configurateur
 {
-    public class ConfigEnAttenteProjection:IProjection
+    public class ConfigEnAttenteProjection : IProjection
     {
         public IList<Config> Configs { get; set; } = new List<Config>();
 
@@ -28,5 +28,4 @@ namespace Configurateur
             Configs.Add(newConfig);
         }
     }
-
 }

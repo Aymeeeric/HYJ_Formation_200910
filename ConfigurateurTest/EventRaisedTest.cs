@@ -1,8 +1,8 @@
 using Configurateur;
+using Configurateur.Services;
 using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
-using Configurateur.Services;
 using Xunit;
 
 namespace ConfigurateurTest
@@ -14,17 +14,20 @@ namespace ConfigurateurTest
         {
             Configuration config = new Configuration(new List<IEvent>());
 
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee =true,
-                    OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee =false,
-                    OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
             var optionSelectionneeEvent = new OptionSelectionnee(new OptionId("A"));
 
             List<IEvent> eventRaised = config.SelectionneModele();
@@ -34,7 +37,7 @@ namespace ConfigurateurTest
 
             eventRaised[0]
                 .ShouldBeOfType<ModeleSelectionne>()
-                .ShouldBe(modelSelectionneEvent);
+                .ShouldBe(modeleSelectionneEvent);
 
             eventRaised[1]
                 .ShouldBeOfType<OptionSelectionnee>()
@@ -46,20 +49,23 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("B");
 
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee =true,
-                    OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee =false,
-                    OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
             var optionSelectionneeEvent = new OptionSelectionnee(optionId);
 
-            var history = new List<IEvent>() { modelSelectionneEvent };
+            var history = new List<IEvent>() { modeleSelectionneEvent };
             Configuration config = new Configuration(history);
 
             List<IEvent> eventRaised = config.SelectionneOption(optionId);
@@ -77,20 +83,23 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee =true,
-                    OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee =false,
-                    OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
             var optionSelectionneeEvent = new OptionSelectionnee(optionId);
 
-            var history = new List<IEvent>() { modelSelectionneEvent, optionSelectionneeEvent };
+            var history = new List<IEvent>() { modeleSelectionneEvent, optionSelectionneeEvent };
             Configuration config = new Configuration(history);
 
             List<IEvent> eventRaised = config.SelectionneOption(optionId);
@@ -103,22 +112,25 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee = true,
-                        OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee = false,
-                        OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
             var optionSelectionneeEvent = new OptionSelectionnee(optionId);
 
             var optionDeselectionneeEvent = new OptionDeselectionnee(optionId);
 
-            var history = new List<IEvent>() { modelSelectionneEvent, optionSelectionneeEvent };
+            var history = new List<IEvent>() { modeleSelectionneEvent, optionSelectionneeEvent };
             Configuration config = new Configuration(history);
 
             List<IEvent> eventRaised = config.DeselectionneOption(optionId);
@@ -136,20 +148,23 @@ namespace ConfigurateurTest
         {
             var optionId = new OptionId("A");
 
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee = true,
-                        OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee = false,
-                        OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
             var optionSelectionneeEvent = new OptionSelectionnee(optionId);
 
-            var history = new List<IEvent>() { modelSelectionneEvent, optionSelectionneeEvent };
+            var history = new List<IEvent>() { modeleSelectionneEvent, optionSelectionneeEvent };
             Configuration config = new Configuration(history);
 
             List<IEvent> eventRaised = config.DeselectionneOption(new OptionId("B"));
@@ -160,22 +175,25 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Show_All_OnGoing_Config()
         {
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee = true,
-                        OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee = false,
-                        OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
 
             var wrapper = new ConfigurationEventWrapper()
             {
                 ConfigurationId = new ConfigurationId("CONFIGA"),
-                Event = modelSelectionneEvent
+                Event = modeleSelectionneEvent
             };
 
             ConfigEnAttenteProjection projection = new ConfigEnAttenteProjection();
@@ -188,22 +206,25 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Store_Events_When_Publish_Event()
         {
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee = true,
-                        OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee = false,
-                        OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
 
             var wrapper = new ConfigurationEventWrapper()
             {
                 ConfigurationId = new ConfigurationId("CONFIGA"),
-                Event = modelSelectionneEvent
+                Event = modeleSelectionneEvent
             };
             var eventStore = new EventStore();
             var service = new PubSubService(eventStore, new List<IProjection>());
@@ -217,22 +238,25 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Call_Handlers_When_Publish_Event()
         {
-            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            var modeleSelectionneEvent = new ModeleSelectionne(new ModeleId("MODELEA"), new Options[]
             {
-                Options = new Options[]
+                new Options()
                 {
-                    new Options(){IsSelectionnee = true,
-                        OptionId = new OptionId("A")},
+                    IsSelectionnee = true,
+                    OptionId = new OptionId("A")
+                },
 
-                    new Options(){IsSelectionnee = false,
-                        OptionId = new OptionId("B")},
-                }
-            };
+                new Options()
+                {
+                    IsSelectionnee = false,
+                    OptionId = new OptionId("B")
+                },
+            });
 
             var wrapper = new ConfigurationEventWrapper()
             {
                 ConfigurationId = new ConfigurationId("CONFIGA"),
-                Event = modelSelectionneEvent
+                Event = modeleSelectionneEvent
             };
             var eventStore = new EventStore();
             var projection = new ConfigEnAttenteProjection();
@@ -258,11 +282,11 @@ namespace ConfigurateurTest
             var events = aggregate.SelectionneModele();
 
             pubSubService.Handle(events.Select(
-                evt=>(IEventWrapper) new ConfigurationEventWrapper()
-                    {
-                        ConfigurationId = new ConfigurationId("CONFIGA"),
-                        Event = evt
-                    }
+                evt => (IEventWrapper)new ConfigurationEventWrapper()
+                {
+                    ConfigurationId = new ConfigurationId("CONFIGA"),
+                    Event = evt
+                }
                     )
                 .ToList()
             );
@@ -274,7 +298,6 @@ namespace ConfigurateurTest
             projection.Configs.Count.ShouldBe(1);
         }
 
-
         [Fact]
         public void Should_Display_Updated_Projections_When_Send_Command_Via_Services()
         {
@@ -282,7 +305,7 @@ namespace ConfigurateurTest
             var projection = new ConfigEnAttenteProjection();
             var pubSubService = new PubSubService(eventStore, new List<IProjection> { projection });
 
-            var configService = new ConfigurationService(eventStore,pubSubService);
+            var configService = new ConfigurationService(eventStore, pubSubService);
             configService.SelectionneModele(new ConfigurationId("MODELE1"));
 
             eventStore.Events.ShouldNotBeEmpty();

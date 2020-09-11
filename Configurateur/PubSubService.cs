@@ -15,7 +15,7 @@ namespace Configurateur
 
         public void Handle(List<IEventWrapper> wrappers)
         {
-            _eventStore.Save(wrappers);
+            _eventStore.SaveAsync(wrappers).Wait();
 
             foreach (var eventWrapper in wrappers)
             {

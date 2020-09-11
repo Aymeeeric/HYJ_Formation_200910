@@ -4,28 +4,32 @@ namespace Configurateur
 {
     public struct ModeleSelectionne : IEvent
     {
-        public ModeleSelectionne(ModeleId modeleId)
+        public ModeleSelectionne(ModeleId modeleId, Options[] options)
         {
             ModeleId = modeleId;
-            Options = null;
+            Options = options;
         }
 
-        public Options[] Options { get; set; }
-        public ModeleId ModeleId { get; set; }
+        public Options[] Options { get; }
+        public ModeleId ModeleId { get; }
 
         public override string ToString()
         {
-            return $"{this.GetType().Name} options : {string.Join(",", Options.Select(opt => opt.OptionId))}";
+            return $"{this.GetType().Name} modeleID : {ModeleId.Id} options : {string.Join(",", Options.Select(opt => opt.OptionId))}";
         }
 
         public override bool Equals(object obj)
         {
-            return this.Options.Length == ((ModeleSelectionne)obj).Options.Length;
+            if (obj is ModeleSelectionne)
+                return (this.Options.Length == ((ModeleSelectionne)obj).Options.Length &&
+                        this.ModeleId.Id == ((ModeleSelectionne)obj).ModeleId.Id);
+
+            return false;
         }
 
         public override int GetHashCode()
         {
-            throw new System.NotImplementedException();
+            return ModeleId.GetHashCode() + Options.GetHashCode();
         }
     }
 }
