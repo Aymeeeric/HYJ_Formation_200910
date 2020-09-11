@@ -1,6 +1,7 @@
 using Configurateur;
 using Shouldly;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace ConfigurateurTest
@@ -155,7 +156,6 @@ namespace ConfigurateurTest
             eventRaised.ShouldBeEmpty();
         }
 
-
         [Fact]
         public void Should_Show_All_OnGoing_Config()
         {
@@ -207,11 +207,10 @@ namespace ConfigurateurTest
             var eventStore = new EventStore();
             var service = new PubSubService(eventStore, new List<IProjection>());
 
-            service.Handle(wrapper);
+            service.Handle(new List<IEventWrapper> { wrapper });
 
             eventStore.Events.ShouldNotBeEmpty();
             eventStore.Events.Count.ShouldBe(1);
-
         }
 
         [Fact]
@@ -236,9 +235,9 @@ namespace ConfigurateurTest
             };
             var eventStore = new EventStore();
             var projection = new ConfigEnAttenteProjection();
-            var service = new PubSubService(eventStore,new List<IProjection>{ projection });
+            var service = new PubSubService(eventStore, new List<IProjection> { projection });
 
-            service.Handle(wrapper);
+            service.Handle(new List<IEventWrapper> { wrapper });
 
             eventStore.Events.ShouldNotBeEmpty();
             eventStore.Events.Count.ShouldBe(1);
@@ -247,6 +246,31 @@ namespace ConfigurateurTest
             projection.Configs.Count.ShouldBe(1);
         }
 
+        [Fact]
+        public void Should_Display_Updated_Projections_When_Send_Command()
+        {
+            var eventStore = new EventStore();
+            var projection = new ConfigEnAttenteProjection();
+            var service = new PubSubService(eventStore, new List<IProjection> { projection });
 
+            var aggregate = new Configuration(new List<IEvent>());
+            var events = aggregate.SelectionneModele();
+
+            service.Handle(events.Select(
+                evt=>(IEventWrapper) new ConfigurationEventWrapper()
+                    {
+                        ConfigurationId = new ConfigurationId("CONFIGA"),
+                        Event = evt
+                    }
+                    )
+                .ToList()
+            );
+
+            eventStore.Events.ShouldNotBeEmpty();
+            eventStore.Events.Count.ShouldBe(2);
+
+            projection.Configs.ShouldNotBeEmpty();
+            projection.Configs.Count.ShouldBe(1);
+        }
     }
 }

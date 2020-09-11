@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Configurateur;
 
 namespace Configurateur
 {
@@ -14,12 +13,16 @@ namespace Configurateur
             _projections = projections;
         }
 
-        public void Handle(ConfigurationEventWrapper wrapper)
+        public void Handle(List<IEventWrapper> wrappers)
         {
-            _eventStore.Save(wrapper);
-            foreach (var projection in _projections)
+            _eventStore.Save(wrappers);
+
+            foreach (var eventWrapper in wrappers)
             {
-                projection.Apply(wrapper);
+                foreach (var projection in _projections)
+                {
+                    projection.Apply(eventWrapper);
+                }
             }
         }
     }

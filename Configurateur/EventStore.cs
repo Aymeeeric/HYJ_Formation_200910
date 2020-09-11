@@ -6,9 +6,9 @@ namespace Configurateur
     {
         public List<IEventWrapper> Events { get; set; } = new List<IEventWrapper>();
 
-        public void Save(IEventWrapper wrapper)
+        public void Save(List<IEventWrapper> wrappers)
         {
-            Events.Add(wrapper);
+            Events.AddRange(wrappers);
         }
     }
 }
