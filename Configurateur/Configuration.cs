@@ -39,8 +39,16 @@ namespace Configurateur
         {
             if (_projection.OptionSelectionneeIds.Any(opt => opt.Equals(optionId)))
                 return new List<IEvent>();
-            else
-                return new List<IEvent>() { new OptionSelectionnee(optionId) };
+
+            return new List<IEvent>() { new OptionSelectionnee(optionId) };
+        }
+
+        public List<IEvent> DeselectionneOption(OptionId optionId)
+        {
+            if (_projection.OptionSelectionneeIds.Any(opt => opt.Equals(optionId)))
+                return new List<IEvent>() { new OptionDeselectionnee(optionId) };
+
+            return new List<IEvent>();
         }
 
         private class DecisionProjection
@@ -49,11 +57,12 @@ namespace Configurateur
 
             public void Apply(IEvent @event)
             {
-
                 if (@event is OptionSelectionnee optEvt)
                     PlayOptionSelectionneeEvent(optEvt);
-            }
 
+                if (@event is OptionDeselectionnee optDesEvt)
+                    PlayOptionDeselectionneeEvent(optDesEvt);
+            }
 
             private void PlayOptionSelectionneeEvent(OptionSelectionnee @event)
             {
@@ -62,6 +71,13 @@ namespace Configurateur
                     return;
 
                 OptionSelectionneeIds.Add(@event.OptionSelectionneeId);
+            }
+
+            private void PlayOptionDeselectionneeEvent(OptionDeselectionnee @event)
+            {
+                if (OptionSelectionneeIds != null &&
+                    OptionSelectionneeIds.Any(id => id.Equals(@event)))
+                    OptionSelectionneeIds.Remove(@event.OptionDeselectionneeId);
             }
         }
     }

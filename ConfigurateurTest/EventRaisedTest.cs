@@ -95,5 +95,64 @@ namespace ConfigurateurTest
 
             eventRaised.ShouldBeEmpty();
         }
+
+        [Fact]
+        public void Config_Should_Raise_OptionA_Deselectionne_When_OptionA_Selectionne_Then_Deslectionne()
+        {
+            var optionId = new OptionId("A");
+
+            var modelSelectionneEvent = new ModeleSelectionne()
+            {
+                Options = new Options[]
+                {
+                    new Options(){IsSelectionnee = true,
+                        OptionId = new OptionId("A")},
+
+                    new Options(){IsSelectionnee = false,
+                        OptionId = new OptionId("B")},
+                }
+            };
+            var optionSelectionneeEvent = new OptionSelectionnee(optionId);
+
+            var optionDeselectionneeEvent = new OptionDeselectionnee(optionId);
+
+            var history = new List<IEvent>() { modelSelectionneEvent, optionSelectionneeEvent };
+            Configuration config = new Configuration(history);
+
+            List<IEvent> eventRaised = config.DeselectionneOption(optionId);
+
+            eventRaised.ShouldNotBeNull();
+            eventRaised.Count.ShouldBe(1);
+
+            eventRaised[0]
+                .ShouldBeOfType<OptionDeselectionnee>()
+                .ShouldBe(optionDeselectionneeEvent);
+        }
+
+        [Fact]
+        public void Config_Should_Raise_Nothing_When_OptionB_Deselectionne()
+        {
+            var optionId = new OptionId("A");
+
+            var modelSelectionneEvent = new ModeleSelectionne()
+            {
+                Options = new Options[]
+                {
+                    new Options(){IsSelectionnee = true,
+                        OptionId = new OptionId("A")},
+
+                    new Options(){IsSelectionnee = false,
+                        OptionId = new OptionId("B")},
+                }
+            };
+            var optionSelectionneeEvent = new OptionSelectionnee(optionId);
+
+            var history = new List<IEvent>() { modelSelectionneEvent, optionSelectionneeEvent };
+            Configuration config = new Configuration(history);
+
+            List<IEvent> eventRaised = config.DeselectionneOption(new OptionId("B"));
+
+            eventRaised.ShouldBeEmpty();
+        }
     }
 }
