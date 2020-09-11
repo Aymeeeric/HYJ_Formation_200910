@@ -183,5 +183,36 @@ namespace ConfigurateurTest
             projection.Configs.ShouldNotBeEmpty();
             projection.Configs.Count.ShouldBe(1);
         }
+
+        [Fact]
+        public void Should_Store_Events_When_Publish_Event()
+        {
+            var modelSelectionneEvent = new ModeleSelectionne(new ModeleId("1"))
+            {
+                Options = new Options[]
+                {
+                    new Options(){IsSelectionnee = true,
+                        OptionId = new OptionId("A")},
+
+                    new Options(){IsSelectionnee = false,
+                        OptionId = new OptionId("B")},
+                }
+            };
+
+            var wrapper = new ConfigurationEventWrapper()
+            {
+                ConfigurationId = new ConfigurationId("CONFIGA"),
+                Event = modelSelectionneEvent
+            };
+            var eventStore = new EventStore();
+            var service = new PubSubService(eventStore);
+
+            service.Handle(wrapper);
+
+            eventStore.Events.ShouldNotBeEmpty();
+            eventStore.Events.Count.ShouldBe(1);
+
+
+        }
     }
 }
