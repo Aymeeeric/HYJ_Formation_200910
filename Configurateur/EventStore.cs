@@ -12,24 +12,39 @@ namespace Configurateur
 
         private readonly string fileName = @"C:\Temp\EventStore.json";
 
+        private readonly JsonSerializerSettings _jsonSerializer = new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+            TypeNameHandling = TypeNameHandling.All,
+            TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+            ObjectCreationHandling = ObjectCreationHandling.Replace
+        };
+
         public async Task SaveAsync(List<IEventWrapper> wrappers)
         {
             Events.AddRange(wrappers);
+
             using (var writer = File.AppendText(fileName))
             {
                 foreach (var @event in Events)
                 {
-                    var jsonSerializer = new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                        TypeNameHandling = TypeNameHandling.All,
-                        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-                        ObjectCreationHandling = ObjectCreationHandling.Replace
-                    };
-                    var json = JsonConvert.SerializeObject(@event, jsonSerializer);
+                    var json = JsonConvert.SerializeObject(@event, _jsonSerializer);
                     await writer.WriteLineAsync(json);
                 }
             }
+        }
+
+        public List<IEventWrapper> Load()
+        {
+            List<IEventWrapper> wrappers = new List<IEventWrapper>();
+
+            string[] lines = File.ReadAllLines(fileName);
+            wrappers.AddRange(
+                lines
+                    .Select(line => (IEventWrapper)JsonConvert.DeserializeObject(line, _jsonSerializer))
+                    .ToList());
+
+            return wrappers;
         }
 
         public List<IEvent> GetAllEventsForId(string id)

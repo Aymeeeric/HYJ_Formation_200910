@@ -313,6 +313,7 @@ namespace ConfigurateurTest
 
             projection.Configs.ShouldNotBeEmpty();
             projection.Configs.Count.ShouldBe(1);
+
         }
     }
 }
