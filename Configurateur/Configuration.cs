@@ -33,6 +33,8 @@ namespace Configurateur
 
             var optionSelectionneeEvent = new OptionSelectionnee(new OptionId("A"));
             return new List<IEvent>() { modeleSelectionneEvent, optionSelectionneeEvent };
+
+            // TODO : apply events to _projection
         }
 
         public List<IEvent> SelectionneOption(OptionId optionId)
@@ -41,6 +43,8 @@ namespace Configurateur
                 return new List<IEvent>();
 
             return new List<IEvent>() { new OptionSelectionnee(optionId) };
+
+            // TODO : apply events to _projection
         }
 
         public List<IEvent> DeselectionneOption(OptionId optionId)
@@ -49,6 +53,8 @@ namespace Configurateur
                 return new List<IEvent>() { new OptionDeselectionnee(optionId) };
 
             return new List<IEvent>();
+
+            // TODO : apply events to _projection
         }
 
         private class DecisionProjection
