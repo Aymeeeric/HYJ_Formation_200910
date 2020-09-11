@@ -5,7 +5,13 @@ namespace Configurateur
 {
     public struct ConfigurationEventWrapper : IEventWrapper
     {
-        public IEvent Event { get; set; }
         public ConfigurationId ConfigurationId { get; set; }
+
+        public IEvent Event { get; set; }
+
+        public string GetId()
+        {
+            return ConfigurationId.Id;
+        }
     }
 }

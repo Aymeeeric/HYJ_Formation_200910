@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Configurateur
 {
@@ -9,6 +10,14 @@ namespace Configurateur
         public void Save(List<IEventWrapper> wrappers)
         {
             Events.AddRange(wrappers);
+        }
+
+        public List<IEvent> GetAllEventsForId(string id)
+        {
+            return Events.
+                Where(wrp => wrp.GetId().Equals(id))
+                .Select(wrp => wrp.Event)
+                .ToList();
         }
     }
 }
