@@ -4,10 +4,10 @@ namespace Configurateur
 {
     public class PubSubService
     {
-        private readonly EventStore _eventStore;
+        private readonly IEventStore _eventStore;
         private readonly List<IProjection> _projections;
 
-        public PubSubService(EventStore eventStore, List<IProjection> projections)
+        public PubSubService(IEventStore eventStore, List<IProjection> projections)
         {
             _eventStore = eventStore;
             _projections = projections;
@@ -15,7 +15,7 @@ namespace Configurateur
 
         public void Handle(List<IEventWrapper> wrappers)
         {
-            _eventStore.SaveAsync(wrappers).Wait();
+            _eventStore.SaveEvents(wrappers);
 
             foreach (var eventWrapper in wrappers)
             {

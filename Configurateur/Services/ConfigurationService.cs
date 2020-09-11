@@ -4,10 +4,10 @@ namespace Configurateur.Services
 {
     public class ConfigurationService
     {
-        private readonly EventStore _eventStore;
+        private readonly IEventStore _eventStore;
         private readonly PubSubService _pubSubService;
 
-        public ConfigurationService(EventStore eventStore, PubSubService pubSubService)
+        public ConfigurationService(IEventStore eventStore, PubSubService pubSubService)
         {
             _eventStore = eventStore;
             _pubSubService = pubSubService;

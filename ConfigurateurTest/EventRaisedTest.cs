@@ -226,7 +226,7 @@ namespace ConfigurateurTest
                 ConfigurationId = new ConfigurationId("CONFIGA"),
                 Event = modeleSelectionneEvent
             };
-            var eventStore = new EventStore();
+            var eventStore = new InMemoryEventStore();
             var service = new PubSubService(eventStore, new List<IProjection>());
 
             service.Handle(new List<IEventWrapper> { wrapper });
@@ -258,7 +258,7 @@ namespace ConfigurateurTest
                 ConfigurationId = new ConfigurationId("CONFIGA"),
                 Event = modeleSelectionneEvent
             };
-            var eventStore = new EventStore();
+            var eventStore = new InMemoryEventStore();
             var projection = new ConfigEnAttenteProjection();
             var service = new PubSubService(eventStore, new List<IProjection> { projection });
 
@@ -274,7 +274,7 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Display_Updated_Projections_When_Send_Command()
         {
-            var eventStore = new EventStore();
+            var eventStore = new InMemoryEventStore();
             var projection = new ConfigEnAttenteProjection();
             var pubSubService = new PubSubService(eventStore, new List<IProjection> { projection });
 
@@ -301,7 +301,7 @@ namespace ConfigurateurTest
         [Fact]
         public void Should_Display_Updated_Projections_When_Send_Command_Via_Services()
         {
-            var eventStore = new EventStore();
+            var eventStore = new InMemoryEventStore();
             var projection = new ConfigEnAttenteProjection();
             var pubSubService = new PubSubService(eventStore, new List<IProjection> { projection });
 
@@ -315,5 +315,16 @@ namespace ConfigurateurTest
             projection.Configs.Count.ShouldBe(1);
 
         }
+
+        [Fact]
+        public void Should_Not_Save_Event_If_Already_Recorded()
+        {
+            var eventStore = new EventStore();
+            var projection = new ConfigEnAttenteProjection();
+            var pubSubService = new PubSubService(eventStore, new List<IProjection> { projection });
+
+
+        }
     }
+
 }
