@@ -9,7 +9,7 @@ namespace Configurateur.Infra
     {
         public IList<Config> Configs { get; set; } = new List<Config>();
 
-        public void Set(PublishedEvent publishedEvent)
+        public void Apply(PublishedEvent publishedEvent)
         {
             if (publishedEvent.Event is ModeleSelectionne modeleSelectionne)
             {
